@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 
 def login(driver):
@@ -34,7 +35,11 @@ def login(driver):
 def verify(driver):
     while True:
         try:
-            codeHTML = driver.find_element(By.ID, "Code")
+            try: # if no code html element found, login assumed successful
+                codeHTML = driver.find_element(By.ID, "Code")
+            except NoSuchElementException:
+                break
+
             submitBtn = driver.find_element("css selector", "input[type='submit']")
 
             codeHTML.clear()
@@ -44,9 +49,8 @@ def verify(driver):
                 codeHTML.send_keys(codeInput)
                 submitBtn.click()
             else:
-                print("No verification code entered. Assuming login is successful.")
-                break
-
+                continue # if no code entered, loops to start of while loop to break when no code html element found
+                
             error = driver.find_element("css selector", "div.text-danger.validation-summary-errors li").text
             if "Invalid code." in error:
                 continue
