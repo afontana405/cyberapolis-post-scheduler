@@ -32,23 +32,27 @@ def login(driver):
         print(f"An error occured: {e}")
 
 def verify(driver):
-    try:
-        codeHTML = driver.find_element(By.ID, "Code")
-        submitBtn = driver.find_element("css selector", "input[type='submit']")
+    while True:
+        try:
+            codeHTML = driver.find_element(By.ID, "Code")
+            submitBtn = driver.find_element("css selector", "input[type='submit']")
 
-        codeHTML.clear()
+            codeHTML.clear()
 
-        codeInput = input('Insert Verifcation Code (check email) if verfication code not needed leave blank and press enter:     ')
-        if codeInput != "":
-            codeHTML.send_keys(codeInput)
-            submitBtn.click()
+            codeInput = input('Insert Verifcation Code (check email) if verfication code not needed leave blank and press enter:     ')
+            if codeInput != "":
+                codeHTML.send_keys(codeInput)
+                submitBtn.click()
+            else:
+                print("No verification code entered. Assuming login is successful.")
+                break
 
-        error = driver.find_element("css selector", "div.text-danger.validation-summary-errors li").text
-        if "Invalid code." in error:
-            verify()
+            error = driver.find_element("css selector", "div.text-danger.validation-summary-errors li").text
+            if "Invalid code." in error:
+                continue
 
-    except Exception as e:
-        print(f"An error occured: {e}")
+        except Exception as e:
+            print(f"An error occured: {e}")
 
 if __name__ == "__main__":
     driver = None # Initialize driver 
