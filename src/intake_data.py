@@ -8,8 +8,8 @@ def intakeExcelSheet():
     """
     while True:
         try:
-            # filePath = input("Enter full path to your Excel file: ")
-            filePath = r"C:\Users\14022\Desktop\test.xlsx"
+            filePath = input("Enter full path to your Excel file: ")
+            # filePath = r"C:\Users\14022\Desktop\test.xlsx"
             
             # Check if the file exists before attempting to read it
             if not os.path.exists(filePath):
