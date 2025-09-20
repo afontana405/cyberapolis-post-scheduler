@@ -2,8 +2,11 @@ from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 
 from login import login
-
+from intake_data import intakeExcelSheet
 def main():
+
+    df = intakeExcelSheet()
+    print(df.head())
     driver = None # Initialize driver 
     try:
         driver = webdriver.Chrome()
