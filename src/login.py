@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
 
 def login(driver):
@@ -48,4 +49,25 @@ def verify(driver):
 
     except Exception as e:
         print(f"An error occured: {e}")
+
+if __name__ == "__main__":
+    driver = None # Initialize driver 
+    try:
+        driver = webdriver.Chrome()
+
+        loggedInDriver = login(driver)
+
+        if loggedInDriver:
+            print('login successful')
+
+    except WebDriverException as e:
+        print(f"A WebDriver error occurred: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+    finally:
+        # Step 5: Ensure the browser is closed, regardless of success or failure.
+        if driver:
+            input("press enter to close browser")
+            driver.quit()
+            print("Browser session closed.")
 
