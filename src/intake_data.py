@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 
+from create_post import createScheduledPost
 def intakeExcelSheet():
     """
     Prompts the user for a full file path to an Excel sheet,
@@ -30,6 +31,7 @@ if __name__ == "__main__":
     # This block will only run when you execute this script directly
     try:
         df = intakeExcelSheet()
+        
         if df is not None:
             print("\nSuccessfully loaded Excel sheet into a DataFrame:")
             print("-" * 30)
