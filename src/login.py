@@ -4,7 +4,9 @@ from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import WebDriverException
-from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support import expected_conditions as EC
 
 def login(driver):
     try:
@@ -34,28 +36,38 @@ def login(driver):
 def verify(driver):
     while True:
         try:
-            try: # if no code html element found, login assumed successful
-                codeHTML = driver.find_element(By.ID, "Code")
-            except NoSuchElementException:
-                break
-
-            submitBtn = driver.find_element("css selector", "input[type='submit']")
+            codeHTML = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.ID, "Code"))
+            )
+            submitBtn = driver.find_element(By.CSS_SELECTOR, "input[type='submit']")
 
             codeHTML.clear()
 
-            codeInput = input('Insert Verifcation Code (check email) if verfication code not needed leave blank and press enter:     ')
+            codeInput = input('Insert Verification Code (check email) or press Enter if not needed: ')
             if codeInput != "":
                 codeHTML.send_keys(codeInput)
                 submitBtn.click()
             else:
-                continue # if no code entered, loops to start of while loop to break when no code html element found
-                
-            error = driver.find_element("css selector", "div.text-danger.validation-summary-errors li").text
-            if "Invalid code." in error:
-                continue
+                print("No verification code entered. Assuming login is successful.")
+                break
 
+            try:
+                WebDriverWait(driver, 5).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, "div.text-danger.validation-summary-errors"))
+                )
+                print("Invalid code. Please try again.")
+            except TimeoutException:
+                print("Code submitted successfully. Login completed.")
+                break
+
+        except TimeoutException:
+            print("No verification page found or login was successful.")
+            break
+        
         except Exception as e:
-            print(f"An error occured: {e}")
+            print(f"An unexpected error occurred in the verify function: {e}")
+            break
+
 
 if __name__ == "__main__":
     driver = None # Initialize driver 
