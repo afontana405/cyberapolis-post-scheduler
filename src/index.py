@@ -6,7 +6,7 @@ from intake_data import intakeExcelSheet
 def main():
 
     df = intakeExcelSheet()
-    print(df.head())
+    
     driver = None # Initialize driver 
     try:
         driver = webdriver.Chrome()
