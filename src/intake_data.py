@@ -1,6 +1,7 @@
-import pandas as pd
 import os
+import pandas as pd
 
+from create_post import createScheduledPost
 def intakeExcelSheet():
     """
     Prompts the user for a full file path to an Excel sheet,
@@ -8,8 +9,8 @@ def intakeExcelSheet():
     """
     while True:
         try:
-            filePath = input("Enter full path to your Excel file: ")
-            # filePath = r"C:\Users\14022\Desktop\test.xlsx"
+            # filePath = input("Enter full path to your Excel file: ")
+            filePath = r"C:\Users\14022\Desktop\test.xlsx" # hard coded path to be deleted when testing over
             
             # Check if the file exists before attempting to read it
             if not os.path.exists(filePath):
@@ -30,6 +31,7 @@ if __name__ == "__main__":
     # This block will only run when you execute this script directly
     try:
         df = intakeExcelSheet()
+        
         if df is not None:
             print("\nSuccessfully loaded Excel sheet into a DataFrame:")
             print("-" * 30)

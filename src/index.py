@@ -3,10 +3,12 @@ from selenium.common.exceptions import WebDriverException
 
 from login import login
 from intake_data import intakeExcelSheet
+from create_post import createScheduledPost
+
 def main():
 
     df = intakeExcelSheet()
-    print(df.head())
+    
     driver = None # Initialize driver 
     try:
         driver = webdriver.Chrome()
@@ -16,6 +18,8 @@ def main():
         if loggedInDriver:
             print('login successful')
 
+        createScheduledPost(df, driver)
+        
     except WebDriverException as e:
         print(f"A WebDriver error occurred: {e}")
     except Exception as e:
